@@ -82,77 +82,83 @@ function getPig() {
             }
         }
         return generateRandomSpace() + chalk.magentaBright(pig[Math.floor(Math.random() * pig.length)])
-    } else {
-        return '⎧ᴿᴵᴾ⎫ Rest in Peace Piggy !'
     }
+    
+    return '⎧ᴿᴵᴾ⎫ Rest in Peace Piggy !'
 }
 
 //Barre de vie
 
 function getHealthBar() {
-    if (state.health > 0) {
-        const heartFull = '💚'
-        const heartEmpty = '💔'
-
-        const total = 10
-        const full  = (state.health * total) / 10
-        const empty = total - full
-
-        return 'Health : ' + new Array(Math.floor(full)).fill(heartFull).join(' ') + ' '
-        + new Array(Math.floor(empty)).fill(heartEmpty).join(' ')
+    if (state.health <= 0) {
+        return
     }
+    
+    const heartFull = '💚'
+    const heartEmpty = '💔'
+
+    const total = 10
+    const full  = (state.health * total) / 10
+    const empty = total - full
+
+    return 'Health : ' + new Array(Math.floor(full)).fill(heartFull).join(' ') + ' '
+    + new Array(Math.floor(empty)).fill(heartEmpty).join(' ')
 }
 
 //Barre de faim
 
 function getFoodBar() {
-    if (state.health > 0) {
-        const foodFull = '🍏'
-        const foodEmpty = '🍎'
-
-        const total = 10
-        const full  = (state.food * total) / 10
-        const empty = total - full
-
-        if (state.food <= 0) {
-            return 'PIGGY IS HUNGRY!'
-        }
-
-        return 'Hunger : ' + new Array(Math.floor(full)).fill(foodFull).join(' ') + ' '
-        + new Array(Math.floor(empty)).fill(foodEmpty).join(' ')
+    if (state.health <= 0) {
+        return
     }
+    
+    const foodFull = '🍏'
+    const foodEmpty = '🍎'
+
+    const total = 10
+    const full  = (state.food * total) / 10
+    const empty = total - full
+
+    if (state.food <= 0) {
+        return 'PIGGY IS HUNGRY!'
+    }
+
+    return 'Hunger : ' + new Array(Math.floor(full)).fill(foodFull).join(' ') + ' '
+    + new Array(Math.floor(empty)).fill(foodEmpty).join(' ')
 }
 
 //Barre de propreté
 
 function getCleanliness() {
-    if (state.health > 0) {
-        if (state.cleanliness === false) {
-            return 'Piggy is dirty 💩'
-        } else {
-            return 'Piggy is clean 🚿'
-        } 
+    if (state.health <= 0) {
+        return
     }
+    if (state.cleanliness === false) {
+        return 'Piggy is dirty 💩'
+    }
+    
+    return 'Piggy is clean 🚿' 
 }
 
 //Barre d'humeur
 
 function getMood() {
-    if (state.health > 0) {
+    if (state.health <= 0) {
+        return
+    }
+    
+    switch(state.mood) {
+        case 'happy':
+            return mood = 'Mood : 😀'
 
-        switch(state.mood) {
-            case 'happy':
-                return mood = 'Mood : 😀'
-                
-            case 'normal':
-                return mood = 'Mood : 🙂'
-                
-            case 'sad':
-                return mood ='Mood : 🙁'
-                
-            case 'crying':
-                return mood = 'Mood : 😭'
-                        }
+        case 'normal':
+            return mood = 'Mood : 🙂'
+
+        case 'sad':
+            return mood ='Mood : 🙁'
+
+        case 'crying':
+            return mood = 'Mood : 😭'                
     }
 }
 
@@ -195,23 +201,19 @@ setInterval(function() {
         'Click on "h" to heal Piggy',
         'Click on "p" to play with Piggy',
     ]
+    
     logUpdate(espace.join('\n'))
     state.time += 1
 
-    if (state.food <= 0) {
-        if (state.time % 6 === 0) {
-            state.health-- 
-        }
+    if (state.food <= 0 && state.time % 6 === 0) {
+        state.health-- 
     }
 
     if (state.time % 3 === 0) {
         state.food--
-        }
-    
-    if (state.time % 10 === 0) {
-        if (state.cleanliness === true) {
-        state.cleanliness = Boolean(Math.round(Math.random()));
     }
-
+    
+    if (state.time % 10 === 0 && state.cleanliness === true) {
+        state.cleanliness = Boolean(Math.round(Math.random()));
     }
 }, 1000)
